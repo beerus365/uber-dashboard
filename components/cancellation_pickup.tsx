@@ -56,7 +56,7 @@ const chartConfig = {
 
 export function ChartBarMixed() {
   return (
-    <Card className="w-[calc(65%-1.8rem)] bg-[var(--foreground1)]">
+    <Card className="w-full bg-(--foreground1) mt-4">
       <CardHeader>
         <CardTitle>Driver cancellation rate by pickup zone</CardTitle>
         <CardDescription>Red = above the filtered average, green = below</CardDescription>

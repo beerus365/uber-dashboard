@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
-import { Poppins, Geist } from "next/font/google";
+import { Geist } from "next/font/google";
+import localFont from "next/font/local";
 import { Header}  from "@/components/header"
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import Intro from "@/components/intro";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
-const poppins = Poppins({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-poppins",
+const uber = localFont({
+  src: [
+    { path: "../public/font/UberMoveMedium.otf", weight: "500" },
+    { path: "../public/font/UberMoveBold.otf", weight: "700" },
+  ],
   display: "swap",
 });
 
@@ -24,8 +27,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={cn("font-sans", geist.variable)}
     >
-      <body className="min-h-full flex flex-col">
+      <body className={cn(uber.className, "min-h-full flex flex-col")}>
         <Header></Header>
+        <Intro></Intro>
         {children}
       </body>
     </html>

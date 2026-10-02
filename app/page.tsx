@@ -2,46 +2,28 @@
 import { Cards } from '@/components/cards'
 import { Filter } from '@/components/filter'
 import { ChartPieDonut } from '@/components/pie_chart'
-import { ChartBarMixed } from '@/components/cancellation_pickup'
-import { ChartBarHourly } from '@/components/cancellation_hr'
-
-const hourlyCancellationData = [
-  { hour: 0, rate: 12.6 },
-  { hour: 1, rate: 10.9 },
-  { hour: 2, rate: 9.8 },
-  { hour: 3, rate: 11.1 },
-  { hour: 4, rate: 13.4 },
-  { hour: 5, rate: 14.8 },
-  { hour: 6, rate: 16.5 },
-  { hour: 7, rate: 18.2 },
-  { hour: 8, rate: 20.1 },
-  { hour: 9, rate: 21.4 },
-  { hour: 10, rate: 19.7 },
-  { hour: 11, rate: 18.9 },
-  { hour: 12, rate: 17.6 },
-  { hour: 13, rate: 16.8 },
-  { hour: 14, rate: 15.4 },
-  { hour: 15, rate: 17.2 },
-  { hour: 16, rate: 18.8 },
-  { hour: 17, rate: 22.3 },
-  { hour: 18, rate: 24.1 },
-  { hour: 19, rate: 23.6 },
-  { hour: 20, rate: 21.9 },
-  { hour: 21, rate: 20.2 },
-  { hour: 22, rate: 17.9 },
-  { hour: 23, rate: 15.1 },
-]
 
 export default function Home() {
   return (
-    <main className="w-full max-w-8xl">
+    <main className="w-full">
+
+      <div className='px-4 py-4 mt-4 bg-[var(--foreground1)] rounded-lg border-1 border-[#35383b]'>
+        <h1 className='text-lg font-bold'>How many booking succeed, and how many failed in Uber India?</h1>
+      </div>
+
       <Filter></Filter>
       <Cards></Cards>
-      <div className='flex flex-row gap-4.5 mt-4.5'>
+      <div className='mt-4 flex flex-row gap-4'>
         <ChartPieDonut></ChartPieDonut>
-        <ChartBarMixed></ChartBarMixed>
+        <div className=' flex flex-col gap-3 w-2/3 bg-(--foreground1) p-8 rounded-2xl border-1 border-[#35383b] '>
+          <h1 className='font-bold text-lg border-b-1 border-b-white pb-1'>INSIGHTS</h1>
+          <ul className='flex flex-col gap-2 list-disc pl-5'>
+            <li>27,000 of 1,50,000 bookings (18.0%) ended in a driver cancellation, 0.0 points above the 18.0% study baseline.</li>
+            <li>Only 62.0% of bookings were completed. Driver cancellations and no-driver-found together account for 25.0%, so supply failures are the largest cause of lost bookings.</li>
+            <li>Driver cancellations (18.0%) outnumber customer cancellations (7.0%), so driver reliability deserves separate attention.</li>
+          </ul>
+        </div>
       </div>
-      <ChartBarHourly data={hourlyCancellationData} avg={17.8} />
     </main>
   )
 }

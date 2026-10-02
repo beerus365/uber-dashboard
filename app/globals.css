@@ -49,18 +49,35 @@
 }
 
 body {
-  font-family: var(--font-sans);
+  font-family: 'UberFont', sans-serif;
   width: 100%;
   max-width: 90rem;
-  margin-top: 30 !important;
-  margin: 0 auto;
-  padding-inline: clamp(1rem, 4vw, 3rem);
+  margin: 30px auto !important;
+  padding-left: 70px;
+  padding-right: 70px;
+  box-sizing: border-box;
   color: var(--foreground);
 }
 
 body,
 body * {
   color: #fff;
+}
+
+@font-face {
+  font-family: 'UberFont';
+  src: url('/public/font/UberMoveMedium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'UberFont';
+  src: url('/public/font/UberMoveBold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
 }
 
 :root {
@@ -147,7 +164,7 @@ body * {
 
 .card {
   background-color: var(--foreground1);
-  width: 200px;
+  width: 290px;
   display: flex;
   flex-direction: column;
   padding: 20;
@@ -162,4 +179,15 @@ body * {
 .card h2 {
   font-size: 30px;
   font-weight: bold;
+}
+
+.pickup-wait-card {
+  width: 400px;
+  background-color: var(--background);
+  padding: 20px;
+  border-radius: 15;
+}
+.pickup-wait-card h1 {
+  font-size: 13px;
+  color: #7f8183;
 }

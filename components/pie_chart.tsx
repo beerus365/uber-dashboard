@@ -47,7 +47,7 @@ export function ChartPieDonut({
   const total = counts.reduce((a, b) => a + b, 0)
 
   return (
-    <Card className="col-span-12 flex w-[calc(33.33%-2rem)] ml-8 flex-col gap-0 rounded-xl border-0 bg-[var(--foreground1)] p-4 shadow-none lg:col-span-4">
+    <Card className="col-span-12 flex w-1/3 flex-col gap-0 rounded-xl border-0 bg-(--foreground1) p-4 shadow-none lg:col-span-4">
       <CardHeader className="items-start gap-0 p-0">
         <CardTitle className="text-base font-semibold">
           Booking outcomes
