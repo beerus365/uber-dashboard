@@ -5,6 +5,7 @@ import { Header}  from "@/components/header"
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import Intro from "@/components/intro";
+import { Suspense } from "react";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -28,7 +29,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={cn("font-sans", geist.variable)}
     >
       <body className={cn(uber.className, "min-h-full flex flex-col")}>
-        <Header></Header>
+        <Suspense fallback={null}>
+          <Header></Header>
+        </Suspense>
         <Intro></Intro>
         {children}
       </body>
