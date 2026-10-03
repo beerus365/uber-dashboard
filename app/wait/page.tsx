@@ -1,42 +1,22 @@
-import { ChartLinePickupWaitHr } from '@/components/pickup_wait_hr'
-import { ChartBarPickupZone } from '@/components/pickup_wait_zone'
+import { ChartLineDots } from '@/components/pickup_wait_band'
+import { Filter } from '@/components/filter'
+import { getPickupWaitBandCounts, getCompleteBookingPickUpWait, getCancelledBookingPickUpWait, getCancelledCompletedDifference, getFilteredDashboardData, type DashboardSearchParams } from '@/lib/helpers'
 
-export default function Wait() {
-    const pickupWaitByHour = [
-      { hour: 0, wait: 8.41 },
-      { hour: 1, wait: 8.39 },
-      { hour: 2, wait: 8.55 },
-      { hour: 3, wait: 8.36 },
-      { hour: 4, wait: 8.54 },
-      { hour: 5, wait: 8.45 },
-      { hour: 6, wait: 8.47 },
-      { hour: 7, wait: 8.45 },
-      { hour: 8, wait: 8.52 },
-      { hour: 9, wait: 8.49 },
-      { hour: 10, wait: 8.47 },
-      { hour: 11, wait: 8.48 },
-      { hour: 12, wait: 8.48 },
-      { hour: 13, wait: 8.46 },
-      { hour: 14, wait: 8.47 },
-      { hour: 15, wait: 8.54 },
-      { hour: 16, wait: 8.44 },
-      { hour: 17, wait: 8.46 },
-      { hour: 18, wait: 8.38 },
-      { hour: 19, wait: 8.44 },
-      { hour: 20, wait: 8.45 },
-      { hour: 21, wait: 8.39 },
-      { hour: 22, wait: 8.44 },
-      { hour: 23, wait: 8.46 },
-    ]
+export default async function Wait({ searchParams }: { searchParams: Promise<DashboardSearchParams> }) {
+    const { data, filters } = await getFilteredDashboardData(searchParams);
+    const pickupWaitBands = await getPickupWaitBandCounts(data);
+    const completeBookingAvgWait = getCompleteBookingPickUpWait(data);
+    const cancelledBookingAvgWait = getCancelledBookingPickUpWait(data);
+    const cancelledCompletedDifference = getCancelledCompletedDifference(data);
+
     return(
         <main className="w-full">
             <div className='px-4 py-4 mt-4 bg-[var(--foreground1)] rounded-lg border-1 border-[#35383b]'>
                 <h1 className='text-lg font-bold'>What is the average time for the driver to reach the pickup (dispatched bookings)?</h1>
             </div>  
-
+            <Filter filters={filters}></Filter>
             <div className='flex flex-row gap-4 mt-4'>
-                <ChartLinePickupWaitHr data={pickupWaitByHour} avg={8.46} />
-                <ChartBarPickupZone></ChartBarPickupZone>
+                <ChartLineDots data={pickupWaitBands}></ChartLineDots>
             </div>  
 
             <div className='w-full bg-[var(--foreground1)] p-4 rounded-lg border-1 border-[#35383b] mt-4'>
@@ -45,15 +25,15 @@ export default function Wait() {
                 <span className='flex flex-row justify-around gap-4 mt-4'>
                     <article className='pickup-wait-card'>
                         <h1>Completed Bookings</h1>
-                        <h2 className='text-4xl font-bold'>8.51 min</h2>
+                        <h2 className='text-4xl font-bold'>{completeBookingAvgWait} min</h2>
                     </article>
                     <article className='pickup-wait-card'>
                         <h1>Driver Cancelled Bookings</h1>
-                        <h2 className='text-4xl font-bold text-amber-700'>7.50 min</h2>
+                        <h2 className='text-4xl font-bold text-amber-700'>{cancelledBookingAvgWait} min</h2>
                     </article>
                     <article className='pickup-wait-card'>
                         <h1>Difference</h1>
-                        <h2 className='text-4xl font-bold'>-1.01 min</h2>
+                        <h2 className='text-4xl font-bold'>{cancelledCompletedDifference} min</h2>
                     </article>
                 </span>
             </div>

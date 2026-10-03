@@ -1,13 +1,11 @@
 "use client"
 
-import { TrendingUp } from "lucide-react"
-import { Bar, BarChart, XAxis, YAxis } from "recharts"
+import { Bar, BarChart, Cell, XAxis, YAxis } from "recharts"
 
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -20,73 +18,61 @@ import {
 
 export const description = "A mixed bar chart"
 
-const chartData = [
-  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-  { browser: "firefox", visitors: 187, fill: "var(--color-firefox)" },
-  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-  { browser: "other", visitors: 90, fill: "var(--color-other)" },
-]
-
 const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
-  chrome: {
-    label: "Chrome",
-    color: "var(--chart-1)",
-  },
-  safari: {
-    label: "Safari",
-    color: "var(--chart-2)",
-  },
-  firefox: {
-    label: "Firefox",
-    color: "var(--chart-3)",
-  },
-  edge: {
-    label: "Edge",
-    color: "var(--chart-4)",
-  },
-  other: {
-    label: "Other",
-    color: "var(--chart-5)",
+  cancellations: {
+    label: "Driver cancellations",
+    color: "#e11900",
   },
 } satisfies ChartConfig
 
-export function ChartBarMixed() {
+const barColor = (value: number, average: number) =>
+  value > average * 1.02 ? "#e11900" : value < average * 0.98 ? "#05a357" : "#ffc043"
+
+export function ChartBarMixed({
+  data,
+}: {
+  data: { zone: string; cancellations: number }[]
+}) {
+  const averageCancellations =
+    data.reduce((sum, entry) => sum + entry.cancellations, 0) / (data.length || 1)
+
   return (
     <Card className="w-full bg-(--foreground1) mt-4">
       <CardHeader>
-        <CardTitle>Driver cancellation rate by pickup zone</CardTitle>
-        <CardDescription>Red = above the filtered average, green = below</CardDescription>
+        <CardTitle>Driver cancellations by pickup zone</CardTitle>
+        <CardDescription>Red: above average · Yellow: near average · Green: below average</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="h-72 w-full aspect-auto">
           <BarChart
             accessibilityLayer
-            data={chartData}
+            data={data}
             layout="vertical"
             margin={{
               left: 0,
             }}
           >
             <YAxis
-              dataKey="browser"
+              dataKey="zone"
               type="category"
               tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) =>
-                chartConfig[value as keyof typeof chartConfig]?.label
-              }
+              tickMargin={0}
+              axisLine={true}
+              width={70}
             />
-            <XAxis dataKey="visitors" type="number" hide />
+            <XAxis dataKey="cancellations" type="number" hide />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Bar dataKey="visitors" radius={5} />
+            <Bar dataKey="cancellations" fill="var(--color-cancellations)" radius={5}>
+              {data.map((entry) => (
+                <Cell
+                  key={entry.zone}
+                  fill={barColor(entry.cancellations, averageCancellations)}
+                />
+              ))}
+            </Bar>
           </BarChart>
         </ChartContainer>
       </CardContent>

@@ -1,10 +1,11 @@
 'use client';
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 export function Header() {
     const pathname = usePathname();
+    const search = useSearchParams().toString();
     const navItems = [
         { href: "/", label: "Overview" },
         { href: "/cancel", label: "Cancellations" },
@@ -23,7 +24,7 @@ export function Header() {
                             return (
                                 <Link
                                     key={href}
-                                    href={href}
+                                    href={search ? `${href}?${search}` : href}
                                     aria-current={isActive ? "page" : undefined}
                                         className={`rounded-2xl px-4 py-1 text-sm font-semibold transition-colors hover:text-black! ${
                                         isActive

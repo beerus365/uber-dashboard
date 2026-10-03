@@ -1,13 +1,22 @@
-export function Filter() {
+"use client"
+
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import type { DashboardFilters } from "@/lib/helpers"
+
+export function Filter({ filters }: { filters: DashboardFilters }) {
+    const pathname = usePathname()
+
     return (
         <div className="flex w-full justify-end mt-3">
-            <div className="flex w-fit max-w-full flex-wrap items-end justify-end gap-2.5 bg-[var(--background)] px-6 py-4 text-white">
+            <form method="get" onChange={(event) => event.currentTarget.requestSubmit()} className="flex w-fit max-w-full flex-wrap items-end justify-end gap-2.5 bg-[var(--background)] px-6 py-4 text-white">
             <div className="flex flex-col gap-1">
                 <label htmlFor="from-date" className="text-xs text-[#a8a8a8]">From</label>
                 <input
                 id="from-date"
+                name="from"
                 type="date"
-                defaultValue="2024-01-01"
+                defaultValue={filters.from}
                 className="min-w-[140px] rounded-lg border border-[#3a3a3a] bg-[#1f1f1f] px-2.5 py-2 text-sm text-white [color-scheme:dark] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#276ef1]"
                 />
             </div>
@@ -16,8 +25,9 @@ export function Filter() {
                 <label htmlFor="to-date" className="text-xs text-[#a8a8a8]">To</label>
                 <input
                 id="to-date"
+                name="to"
                 type="date"
-                defaultValue="2024-12-30"
+                defaultValue={filters.to}
                 className="min-w-[140px] rounded-lg border border-[#3a3a3a] bg-[#1f1f1f] px-2.5 py-2 text-sm text-white [color-scheme:dark] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#276ef1]"
                 />
             </div>
@@ -26,8 +36,8 @@ export function Filter() {
                 <label htmlFor="pickup-zone" className="text-xs text-[#a8a8a8]">Pickup zone</label>
                 <select
                 id="pickup-zone"
-                name="pickup-zone"
-                defaultValue="all"
+                name="zone"
+                defaultValue={filters.zone}
                 className="min-w-[140px] rounded-lg border border-[#3a3a3a] bg-[#1f1f1f] px-2.5 py-2 text-sm text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#276ef1]"
                 >
                 <option value="all">All zones</option>
@@ -45,7 +55,7 @@ export function Filter() {
                 <select
                 id="vehicle"
                 name="vehicle"
-                defaultValue="all"
+                defaultValue={filters.vehicle}
                 className="min-w-[140px] rounded-lg border border-[#3a3a3a] bg-[#1f1f1f] px-2.5 py-2 text-sm text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#276ef1]"
                 >
                 <option value="all">All vehicles</option>
@@ -59,13 +69,13 @@ export function Filter() {
                 </select>
             </div>
 
-            <button
-                type="button"
-                className="rounded-full bg-white px-[18px] py-2 text-sm font-semibold !text-black hover:bg-[#e2e2e2] cursor-pointer"
+            <Link
+                href={pathname}
+                className="rounded-full border border-[#3a3a3a] px-4 py-2 text-sm font-semibold hover:bg-[#35383b]"
             >
                 Reset Filters
-            </button>
-            </div>
+            </Link>
+            </form>
         </div>
     )
 }

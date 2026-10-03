@@ -1,9 +1,11 @@
-"use client"
 import { Cards } from '@/components/cards'
 import { Filter } from '@/components/filter'
 import { ChartPieDonut } from '@/components/pie_chart'
+import { getBookingOutcomesCounts, getFilteredDashboardData, type DashboardSearchParams } from '@/lib/helpers'
 
-export default function Home() {
+export default async function Home({ searchParams }: { searchParams: Promise<DashboardSearchParams> }) {
+  const { data: rows, filters } = await getFilteredDashboardData(searchParams);
+  const bookingOutcomesCounts = getBookingOutcomesCounts(rows);
   return (
     <main className="w-full">
 
@@ -11,10 +13,10 @@ export default function Home() {
         <h1 className='text-lg font-bold'>How many booking succeed, and how many failed in Uber India?</h1>
       </div>
 
-      <Filter></Filter>
-      <Cards></Cards>
+      <Filter filters={filters}></Filter>
+      <Cards data={rows}></Cards>
       <div className='mt-4 flex flex-row gap-4'>
-        <ChartPieDonut></ChartPieDonut>
+        <ChartPieDonut counts={bookingOutcomesCounts}></ChartPieDonut>
         <div className=' flex flex-col gap-3 w-2/3 bg-(--foreground1) p-8 rounded-2xl border-1 border-[#35383b] '>
           <h1 className='font-bold text-lg border-b-1 border-b-white pb-1'>INSIGHTS</h1>
           <ul className='flex flex-col gap-2 list-disc pl-5'>

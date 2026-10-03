@@ -1,14 +1,25 @@
 import { ChartPieDonut } from "@/components/revenue_impact"
+import { getRevenueLeakageZoneCounts, getFilteredDashboardData, type DashboardSearchParams } from "@/lib/helpers"
+import { Filter } from "@/components/filter"
 
-export default function RevenueImpact() {
+export default async function RevenueImpact({ searchParams }: { searchParams: Promise<DashboardSearchParams> }) {
+    const { data: rows, filters } = await getFilteredDashboardData(searchParams);
+    const revenueLeakageCounts = getRevenueLeakageZoneCounts(rows);
+    const revenueLeakageData = (Object.entries(revenueLeakageCounts) as [keyof typeof revenueLeakageCounts, number][]).map(
+        ([zone, cancellations]) => ({
+            zone,
+            leakage: Number(((cancellations * 414) / 1_000_000).toFixed(2)),
+        })
+    );
+
     return(
         <main className="w-full">
             <div className='px-4 py-4 mt-4 bg-[var(--foreground1)] rounded-lg border-1 border-[#35383b]'>
                 <h1 className='text-lg font-bold'>What is the estimated fare value lost to driver cancellations?</h1>
             </div>
-
+            <Filter filters={filters}></Filter>
             <div className="flex flex-row gap-4 mt-4">
-                <ChartPieDonut></ChartPieDonut>
+                <ChartPieDonut data={revenueLeakageData}></ChartPieDonut>
                 <div className=' flex flex-col gap-3 w-1/2 bg-(--foreground1) p-8 rounded-2xl border-1 border-[#35383b] '>
                 <h1 className='font-bold text-lg border-b-1 border-b-white pb-1'>INSIGHTS</h1>
                 <ul className='flex flex-col gap-2 list-disc pl-5'>

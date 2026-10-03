@@ -19,27 +19,17 @@ import {
 export const description = "Driver cancellation rate by time of day"
 
 const chartConfig = {
-  rate: { label: "Driver cancellation rate", color: "#000000" },
+  wait: { label: "Avg pickup wait", color: "#276ef1" },
 } satisfies ChartConfig
-
-// Full-dataset rates from the study (%). Pass filtered values via the `data` prop.
-const defaultData = [
-  { segment: "Delhi", rate: 18.35 },
-  { segment: "Gurgaon", rate: 17.8 },
-  { segment: "Noida", rate: 18.12 },
-  { segment: "Ghaziabad", rate: 17.99 },
-  { segment: "Faridabad", rate: 17.99 },
-  { segment: "Other NCR Towns", rate: 17.99 },
-]
 
 const barColor = (v: number, avg: number) =>
   v > avg * 1.02 ? "#e11900" : v < avg * 0.98 ? "#05a357" : "#ffc043"
 
 export function ChartBarPickupZone({
-  data = defaultData,
-  avg = 18.0,
+  data,
+  avg = 8.46,
 }: {
-  data?: { segment: string; rate: number }[]
+  data: { zone: string; wait: number }[]
   avg?: number
 }) {
   return (
@@ -58,32 +48,32 @@ export function ChartBarPickupZone({
           <BarChart accessibilityLayer data={data} margin={{ top: 20, right: 8, left: 0, bottom: 0 }}>
             <CartesianGrid vertical={false} stroke="#e2e2e2" />
             <XAxis
-              dataKey="segment"
+              dataKey="zone"
               tickLine={false}
               axisLine={false}
               tickMargin={10}
               tick={{ fontSize: 12, fill: "#5e5e5e" }}
             />
             <YAxis
-              domain={[0, 25]}
+              domain={[0, "auto"]}
               tickLine={false}
               axisLine={false}
               width={40}
               tick={{ fontSize: 11, fill: "#5e5e5e" }}
-              tickFormatter={(v) => `${v}%`}
+              tickFormatter={(v) => `${v}m`}
             />
             <ChartTooltip
               cursor={{ fill: "rgba(0,0,0,0.04)" }}
               content={
                 <ChartTooltipContent
                   hideLabel
-                  formatter={(v) => `${Number(v).toFixed(2)}%`}
+                  formatter={(v) => `${Number(v).toFixed(2)} min`}
                 />
               }
             />
-            <Bar dataKey="rate" radius={4} isAnimationActive={false}>
+            <Bar dataKey="wait" radius={4} isAnimationActive={false}>
               {data.map((d) => (
-                <Cell key={d.segment} fill={barColor(d.rate, avg)} />
+                <Cell key={d.zone} fill={barColor(d.wait, avg)} />
               ))}
             </Bar>
           </BarChart>
